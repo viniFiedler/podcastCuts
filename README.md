@@ -11,6 +11,7 @@ pip install pytube
 - [x] Download Youtube's video
 - - [ ] List of already dowloaded Videos
 - [ ] Cut video at a certain time
+- - [ ] json of already cut videos
 - [ ] Resize
 - [ ] Color Filter
 - [ ] Create Thumb by bluring the first frame and put a text in it
