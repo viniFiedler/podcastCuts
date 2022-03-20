@@ -3,8 +3,7 @@ from Debug import Debug
 
 class Config:
 
-    # TODO -- Replace every "Config.configs[configName][1] == None" with a function called isNull()
-
+    # Link CLI Parameter with the Config Name
     configParams = {
         "-v": "videoId",
         "--video": "videoId",
@@ -21,8 +20,7 @@ class Config:
 
     configDefaults = {
         "downloadPath": "/home/nate/workspace/proj/podcastCuts/videos/",
-        "resolution": "360p",
-        #"videoId": "https://www.youtube.com/watch?v=JfWESF3cSPc"     
+        "resolution": "360p"
     }
 
     configGroups = {
@@ -30,13 +28,11 @@ class Config:
     }
 
     @staticmethod
-    def extractConfig(args: list = None):
+    def extractConfig(args: list):
 
         # Config.loadconfigFile()
 
         args.pop(0)
-
-        if args == None: pass
 
         for param in args:
 
@@ -62,12 +58,19 @@ class Config:
         Config.configs[configName][1] = configValue
 
     @staticmethod
+    def isNone(configName: str) -> bool:
+        if Config.configs[configName][1] == None:
+            return True
+        else:
+            return False
+
+    @staticmethod
     def getConfigGroup(group: str) -> dict:
         configSet = {}
 
         for configName in Config.configGroups[group]:
 
-            if Config.configs[configName][1] == None:
+            if Config.isNone(configName):
                 try:
                     configSet[configName] = Config.configDefaults[configName]
                 except:
@@ -78,18 +81,22 @@ class Config:
         return configSet
 
     @staticmethod
-    def setNeeded(groups: list): # TODO -- Make this function accept a single string
+    def setNeeded(groups: list | str):
+
+        if type(groups) == str:
+            groups = [groups]
+
         for group in groups:
             
             for configName in Config.configGroups[group]:
-                if Config.configs[configName][1] == None:
+                if Config.isNone(configName):
 
                     try:
                         Config.setConfig(configName, Config.configDefaults[configName])
                     except:
                         pass
 
-                    if Config.configs[configName][1] == None:
+                    if Config.isNone(configName):
                         pass
                     else:
                         continue
@@ -98,9 +105,9 @@ class Config:
                     configValue = None
                     while not validated: # TODO -- Make and directori with a better config name for the user
                         configValue = input("Please give us the {} >>> ".format(configName))
-                        configValue = str(configValue)
+                        configValue = str(configValue) # NOTE -- I think this cast is not necessary
 
-                        # TODO -- check if value is valid, maybe a other class for that?
+                        # TODO -- check if value is valid, maybe other class for that?
                         validated = True
                     
                     Config.setConfig(configName, configValue)
@@ -108,4 +115,3 @@ class Config:
     @staticmethod
     def loadconfigFile( ):
         pass
-    
