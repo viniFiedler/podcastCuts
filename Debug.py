@@ -7,3 +7,10 @@ def dd(variable):
     print("###### End Var Dump ######")
 
     exit(1)
+
+def d(variable):
+    print("###### Var Dump ##########", end="\n\n")
+
+    print(str(variable), end="\n\n")
+
+    print("###### End Var Dump ######")

@@ -12,4 +12,3 @@ class Downloader:
         yt = YouTube(link)
         stream = yt.streams.filter(res=resolution).first()
         stream.download(pathToVideos)
-                     
