@@ -21,8 +21,7 @@ class Config:
 
     configDefaults = {
         "downloadPath": "/home/nate/workspace/proj/podcastCuts/videos/",
-        "resolution": "360p",
-        #"videoId": "https://www.youtube.com/watch?v=JfWESF3cSPc"     
+        "resolution": "360p"
     }
 
     configGroups = {
@@ -108,4 +107,3 @@ class Config:
     @staticmethod
     def loadconfigFile( ):
         pass
-    
