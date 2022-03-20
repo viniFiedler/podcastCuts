@@ -3,6 +3,7 @@ from Debug import Debug
 
 class Config:
 
+    # Link CLI Parameter with the Config Name
     configParams = {
         "-v": "videoId",
         "--video": "videoId",
@@ -27,13 +28,11 @@ class Config:
     }
 
     @staticmethod
-    def extractConfig(args: list = None):
+    def extractConfig(args: list):
 
         # Config.loadconfigFile()
 
         args.pop(0)
-
-        if args == None: pass
 
         for param in args:
 
@@ -82,7 +81,11 @@ class Config:
         return configSet
 
     @staticmethod
-    def setNeeded(groups: list): # TODO -- Make this function accept a single string
+    def setNeeded(groups: list | str):
+
+        if type(groups) == str:
+            groups = [groups]
+
         for group in groups:
             
             for configName in Config.configGroups[group]:
@@ -102,9 +105,9 @@ class Config:
                     configValue = None
                     while not validated: # TODO -- Make and directori with a better config name for the user
                         configValue = input("Please give us the {} >>> ".format(configName))
-                        configValue = str(configValue)
+                        configValue = str(configValue) # NOTE -- I think this cast is not necessary
 
-                        # TODO -- check if value is valid, maybe a other class for that?
+                        # TODO -- check if value is valid, maybe other class for that?
                         validated = True
                     
                     Config.setConfig(configName, configValue)
