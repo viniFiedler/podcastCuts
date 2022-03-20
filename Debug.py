@@ -1,10 +1,9 @@
 
-class Debug:
+def dd(variable):
+    print("###### Var Dump ##########", end="\n\n")
 
-    @staticmethod
-    def dd(variable):
+    print(str(variable), end="\n\n")
 
-        print("DEBUGGGGG", end="\n\n")
+    print("###### End Var Dump ######")
 
-        print(str(variable))
-        exit(1)
+    exit(1)
