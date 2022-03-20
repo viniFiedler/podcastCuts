@@ -3,8 +3,6 @@ from Debug import Debug
 
 class Config:
 
-    # TODO -- Replace every "Config.configs[configName][1] == None" with a function called isNull()
-
     configParams = {
         "-v": "videoId",
         "--video": "videoId",
@@ -61,12 +59,19 @@ class Config:
         Config.configs[configName][1] = configValue
 
     @staticmethod
+    def isNone(configName: str) -> bool:
+        if Config.configs[configName][1] == None:
+            return True
+        else:
+            return False
+
+    @staticmethod
     def getConfigGroup(group: str) -> dict:
         configSet = {}
 
         for configName in Config.configGroups[group]:
 
-            if Config.configs[configName][1] == None:
+            if Config.isNone(configName):
                 try:
                     configSet[configName] = Config.configDefaults[configName]
                 except:
@@ -81,14 +86,14 @@ class Config:
         for group in groups:
             
             for configName in Config.configGroups[group]:
-                if Config.configs[configName][1] == None:
+                if Config.isNone(configName):
 
                     try:
                         Config.setConfig(configName, Config.configDefaults[configName])
                     except:
                         pass
 
-                    if Config.configs[configName][1] == None:
+                    if Config.isNone(configName):
                         pass
                     else:
                         continue
