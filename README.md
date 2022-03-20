@@ -8,7 +8,9 @@ pip install pytube
 
 ## Features
 
-- [ ] Download Youtube's video
+- [x] Download Youtube's video
+- - [x] Json of already downloaded Videos
+- - [x] Json with video Details
 - [ ] Cut video at a certain time
 - [ ] Resize
 - [ ] Color Filter
