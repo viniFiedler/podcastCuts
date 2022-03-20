@@ -45,7 +45,9 @@ def writeJson(link):
 
 def dowloadVideo():
     link = input("Please enter a Youtube link\n")
-    pathToVideos = '/home/vinicius/codes/dowloadAndEdit/videosFolder'
+
+    pathToVideos = os.path.join(os.getcwd(), "videosFolder" )
+    
     resolution = "360p"
 
     writeJson(link)
