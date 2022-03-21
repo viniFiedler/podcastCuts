@@ -1,5 +1,6 @@
 
-from Debug import Debug
+from Debug import *
+import os
 
 class Config:
 
@@ -11,15 +12,20 @@ class Config:
         "--resolution": "resolution"
     }
 
-    # [ valueParameterNeeded, Value ] NOTE -- Maybe put the valueParameter Needed in other attribute
+    valueParamNeeded = {
+        "videoId": True,
+        "resolution": True,
+        "downloadPath": True,
+    }
+
     configs = {
-        "videoId": [True, None],
-        "downloadPath": [True, None],
-        "resolution": [True, None],     
+        "videoId": None,
+        "downloadPath": None,
+        "resolution": None,     
     }
 
     configDefaults = {
-        "downloadPath": "/home/nate/workspace/proj/podcastCuts/videos/",
+        "downloadPath": os.path.join(os.getcwd(), "videosFolder" ),
         "resolution": "360p"
     }
 
@@ -32,8 +38,6 @@ class Config:
 
         # Config.loadconfigFile()
 
-        args.pop(0)
-
         for param in args:
 
             if param not in Config.configParams:
@@ -44,39 +48,45 @@ class Config:
             configName = Config.configParams[param]
             configValue = args[paramIndex + 1]
 
-            if Config.configs[configName][0] == True:
-                Config.configs[configName][1] = configValue
+            if Config.valueParamNeeded[configName]:
+                Config.setConfig(configName, configValue)
             else:
-                Config.configs[configName][1] = True
+                Config.setConfig(configName, True)
 
     @staticmethod
     def getConfig(configName: str):
-        return Config.configs[configName][1]
+        return Config.configs[configName]
 
     @staticmethod
     def setConfig(configName: str, configValue):
-        Config.configs[configName][1] = configValue
+        Config.configs[configName] = configValue
 
     @staticmethod
     def isNone(configName: str) -> bool:
-        if Config.configs[configName][1] == None:
+        if Config.getConfig(configName) == None:
             return True
         else:
             return False
 
     @staticmethod
+    def getDefault(configName: str):
+        return Config.configDefaults[configName]
+
+    @staticmethod
     def getConfigGroup(group: str) -> dict:
         configSet = {}
+
+        # TODO -- Error if group doesnt exist
 
         for configName in Config.configGroups[group]:
 
             if Config.isNone(configName):
                 try:
-                    configSet[configName] = Config.configDefaults[configName]
+                    configSet[configName] = Config.getDefault(configName)
                 except:
                     pass
             else:
-                configSet[configName] = Config.configs[configName][1]
+                configSet[configName] = Config.getConfig(configName)
 
         return configSet
 
@@ -93,24 +103,16 @@ class Config:
 
                     try:
                         Config.setConfig(configName, Config.configDefaults[configName])
-                    except:
-                        pass
+                    except KeyError:
+                        validated = False
+                        configValue = None
+                        while not validated: # TODO -- Make and directory with a better config name for the user
+                            configValue = input("Please give us the {} >>> ".format(configName))
 
-                    if Config.isNone(configName):
-                        pass
-                    else:
-                        continue
-                    
-                    validated = False
-                    configValue = None
-                    while not validated: # TODO -- Make and directori with a better config name for the user
-                        configValue = input("Please give us the {} >>> ".format(configName))
-                        configValue = str(configValue) # NOTE -- I think this cast is not necessary
-
-                        # TODO -- check if value is valid, maybe other class for that?
-                        validated = True
-                    
-                    Config.setConfig(configName, configValue)
+                            # TODO -- check if value is valid, maybe other class for that?
+                            validated = True
+                        
+                        Config.setConfig(configName, configValue)                    
         
     @staticmethod
     def loadconfigFile( ):
