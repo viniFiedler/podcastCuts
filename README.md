@@ -1,6 +1,8 @@
 # podcastCuts
 ## how to install
 
+*This project uses python3.10*
+
 ```python 
 pip install pytube
 
