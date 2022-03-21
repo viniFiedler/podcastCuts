@@ -1,5 +1,5 @@
 from pytube import YouTube
-from Config import *
+from ErrorHandler import *
 import os
 import os.path
 import json
@@ -49,7 +49,7 @@ class videoJson ():
 
     
     ##check if the json exits, if don't, creates it
-    def _createJson(self):
+    def __createJson(self):
         if(os.path.exists(self._path_json) == False):
                 first_dictionary = {"video_details":[]}
                 json_object = json.dumps(first_dictionary, indent = 3)
@@ -63,7 +63,7 @@ class videoJson ():
     ## Append json in correct format
     def addJson(self):
 
-        self._createJson()
+        self.__createJson()
 
         try:
             with open(self._path_json,'r+') as outfile:
@@ -77,29 +77,31 @@ class videoJson ():
 
                     outfile.close() 
         except:
-            print("Error in Appending video.json")
+            showError("Unable To create Json")
             
 
 
 
-def dowloadVideo():
-    link = input("Please enter a Youtube link\n")
+class dowloader():
 
-    pathToVideos = os.path.join(os.getcwd(), "videosFolder" )
+    def __init__(self,link, resolution = '360p'):
+        self._link = link
+        self._path_videos = os.path.join(os.getcwd(), "videosFolder" )
+        self.json = videoJson(link)
+        self._resolution = resolution
 
-    dowloadedVideoJson = videoJson(link)
-
-    dowloadedVideoJson.addJson()
-
-    resolution = "360p"
-
-
-    
-    
-    yt = YouTube(link)
-    stream = yt.streams.filter(res=resolution).first()
-    stream.download(pathToVideos)
+    ## Download Video from Youtube
+    def download(self):
+        try:
+            yt = YouTube(self._link)
+            stream = yt.streams.filter(res=self._resolution).first()
+            stream.download(self._path_videos)
+            self.json.addJson()
+        except:
+            showError("Unable to Download Video")
+        
 
 
 if __name__ == "__main__":
-    dowloadVideo()
+    TestVideo = dowloader("https://www.youtube.com/watch?v=uT_DcEK6jFU&ab_channel=AulaLivre")
+    TestVideo.download()
