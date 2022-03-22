@@ -21,7 +21,7 @@ class Config:
     configs = {
         "videoId": None,
         "downloadPath": None,
-        "resolution": None,     
+        "resolution": None,
     }
 
     configDefaults = {
@@ -54,7 +54,7 @@ class Config:
                 Config.setConfig(configName, True)
 
     @staticmethod
-    def getConfig(configName: str):
+    def getConfig(configName: str):            # NOTE -- Maybe the getConfig() and setConfig() should be renamed to set() and get()
         return Config.configs[configName]
 
     @staticmethod
@@ -73,10 +73,8 @@ class Config:
         return Config.configDefaults[configName]
 
     @staticmethod
-    def getConfigGroup(group: str) -> dict:
+    def getGroup(group: str) -> dict:
         configSet = {}
-
-        # TODO -- Error if group doesnt exist
 
         for configName in Config.configGroups[group]:
 
