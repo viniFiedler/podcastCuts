@@ -38,15 +38,14 @@ class Config:
 
         # Config.loadconfigFile()
 
-        for param in args:
+        for index, param in enumerate(args):
 
             if param not in Config.configParams:
                 # TODO -- Build a Error System, or maybe i could just print a warning and move on
                 continue
 
-            paramIndex = args.index(param)
             configName = Config.configParams[param]
-            configValue = args[paramIndex + 1]
+            configValue = args[index + 1]
 
             if Config.valueParamNeeded[configName]:
                 Config.setConfig(configName, configValue)
@@ -63,7 +62,7 @@ class Config:
 
     @staticmethod
     def isNone(configName: str) -> bool:
-        if Config.getConfig(configName) == None:
+        if Config.getConfig(configName) is None:
             return True
         else:
             return False
@@ -91,7 +90,7 @@ class Config:
     @staticmethod
     def setNeeded(groups: list | str):
 
-        if type(groups) == str:
+        if not isinstance(groups, str):
             groups = [groups]
 
         for group in groups:
@@ -105,7 +104,7 @@ class Config:
                         validated = False
                         configValue = None
                         while not validated: # TODO -- Make and directory with a better config name for the user
-                            configValue = input("Please give us the {} >>> ".format(configName))
+                            configValue = input(f"Please give us the {configName} >>> ")
 
                             # TODO -- check if value is valid, maybe other class for that?
                             validated = True
