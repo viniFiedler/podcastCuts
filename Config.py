@@ -21,7 +21,7 @@ class Config:
     configs = {
         "videoId": None,
         "downloadPath": None,
-        "resolution": None,     
+        "resolution": None,
     }
 
     configDefaults = {
@@ -38,15 +38,14 @@ class Config:
 
         # Config.loadconfigFile()
 
-        for param in args:
+        for index, param in enumerate(args):
 
             if param not in Config.configParams:
                 # TODO -- Build a Error System, or maybe i could just print a warning and move on
                 continue
 
-            paramIndex = args.index(param)
             configName = Config.configParams[param]
-            configValue = args[paramIndex + 1]
+            configValue = args[index + 1]
 
             if Config.valueParamNeeded[configName]:
                 Config.setConfig(configName, configValue)
@@ -54,7 +53,7 @@ class Config:
                 Config.setConfig(configName, True)
 
     @staticmethod
-    def getConfig(configName: str):
+    def getConfig(configName: str):            # NOTE -- Maybe the getConfig() and setConfig() should be renamed to set() and get()
         return Config.configs[configName]
 
     @staticmethod
@@ -63,7 +62,7 @@ class Config:
 
     @staticmethod
     def isNone(configName: str) -> bool:
-        if Config.getConfig(configName) == None:
+        if Config.getConfig(configName) is None:
             return True
         else:
             return False
@@ -73,10 +72,8 @@ class Config:
         return Config.configDefaults[configName]
 
     @staticmethod
-    def getConfigGroup(group: str) -> dict:
+    def getGroup(group: str) -> dict:
         configSet = {}
-
-        # TODO -- Error if group doesnt exist
 
         for configName in Config.configGroups[group]:
 
@@ -93,7 +90,7 @@ class Config:
     @staticmethod
     def setNeeded(groups: list | str):
 
-        if type(groups) == str:
+        if not isinstance(groups, str):
             groups = [groups]
 
         for group in groups:
@@ -107,7 +104,7 @@ class Config:
                         validated = False
                         configValue = None
                         while not validated: # TODO -- Make and directory with a better config name for the user
-                            configValue = input("Please give us the {} >>> ".format(configName))
+                            configValue = input(f"Please give us the {configName} >>> ")
 
                             # TODO -- check if value is valid, maybe other class for that?
                             validated = True
