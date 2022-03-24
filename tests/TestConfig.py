@@ -39,10 +39,6 @@ class TestConfig(unittest.TestCase):
 
         self.assertEqual(first_state, True)
         self.assertEqual(second_state, False)
-    
-    def test_get_default(self):
-
-        self.assertEqual(Config.getDefault('resolution'), '360p')
 
     def test_get_group(self):
 

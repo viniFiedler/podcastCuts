@@ -20,13 +20,8 @@ class Config:
 
     configs = {
         "videoId": None,
-        "downloadPath": None,
-        "resolution": None,
-    }
-
-    configDefaults = {
         "downloadPath": os.path.join(os.getcwd(), "videosFolder" ),
-        "resolution": "360p"
+        "resolution": '360p',
     }
 
     configGroups = {
@@ -68,22 +63,11 @@ class Config:
             return False
 
     @staticmethod
-    def getDefault(configName: str):
-        return Config.configDefaults[configName]
-
-    @staticmethod
     def getGroup(group: str) -> dict:
         configSet = {}
 
         for configName in Config.configGroups[group]:
-
-            if Config.isNone(configName):
-                try:
-                    configSet[configName] = Config.getDefault(configName)
-                except:
-                    pass
-            else:
-                configSet[configName] = Config.getConfig(configName)
+            configSet[configName] = Config.getConfig(configName)
 
         return configSet
 
@@ -98,19 +82,16 @@ class Config:
             for configName in Config.configGroups[group]:
                 if Config.isNone(configName):
 
-                    try:
-                        Config.setConfig(configName, Config.configDefaults[configName])
-                    except KeyError:
-                        validated = False
-                        configValue = None
-                        while not validated: # TODO -- Make and directory with a better config name for the user
-                            configValue = input(f"Please give us the {configName} >>> ")
+                    validated = False
+                    configValue = None
+                    while not validated: # TODO -- Make and directory with a better config name for the user
+                        configValue = input(f"Please give us the {configName} >>> ")
 
-                            # TODO -- check if value is valid, maybe other class for that?
-                            validated = True
-                        
-                        Config.setConfig(configName, configValue)                    
-        
+                        # TODO -- check if value is valid, maybe other class for that?
+                        validated = True
+
+                    Config.setConfig(configName, configValue)
+
     @staticmethod
     def loadconfigFile( ):
         pass
