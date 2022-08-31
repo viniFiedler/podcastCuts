@@ -2,6 +2,7 @@
 from Debug import *
 import os
 
+
 class Config:
 
     # Link CLI Parameter with the Config Name
@@ -20,12 +21,12 @@ class Config:
 
     configs = {
         "videoId": None,
-        "downloadPath": os.path.join(os.getcwd(), "videosFolder" ),
+        "downloadPath": os.path.join(os.getcwd(), "videosFolder"),
         "resolution": '360p',
     }
 
     configGroups = {
-        "download": [ "videoId", "downloadPath", "resolution" ]
+        "download": ["videoId", "downloadPath", "resolution"]
     }
 
     @staticmethod
@@ -48,7 +49,8 @@ class Config:
                 Config.setConfig(configName, True)
 
     @staticmethod
-    def getConfig(configName: str):            # NOTE -- Maybe the getConfig() and setConfig() should be renamed to set() and get()
+    # NOTE -- Maybe the getConfig() and setConfig() should be renamed to set() and get()
+    def getConfig(configName: str):
         return Config.configs[configName]
 
     @staticmethod
@@ -78,14 +80,15 @@ class Config:
             groups = [groups]
 
         for group in groups:
-            
+
             for configName in Config.configGroups[group]:
                 if Config.isNone(configName):
 
                     validated = False
                     configValue = None
-                    while not validated: # TODO -- Make and directory with a better config name for the user
-                        configValue = input(f"Please give us the {configName} >>> ")
+                    while not validated:  # TODO -- Make and directory with a better config name for the user
+                        configValue = input(
+                            f"Please give us the {configName} >>> ")
 
                         # TODO -- check if value is valid, maybe other class for that?
                         validated = True
@@ -93,5 +96,5 @@ class Config:
                     Config.setConfig(configName, configValue)
 
     @staticmethod
-    def loadconfigFile( ):
+    def loadconfigFile():
         pass

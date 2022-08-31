@@ -6,7 +6,7 @@ import os.path
 import json
 
 
-## Create json if dont't exists, and if does, append video info to json
+# Create json if dont't exists, and if does, append video info to json
 class videoJson ():
 
     def __init__(self, link):
@@ -15,14 +15,16 @@ class videoJson ():
         self._video_title = yt.title
         self._video_length = yt.length
         self._video_author = yt.channel_url
-        self._path_json = os.path.join(Config.getConfig("downloadPath"), "video.json" )
-        
+        self._path_json = os.path.join(
+            Config.getConfig("downloadPath"), "video.json")
+
         self._dictionary = {
-            "video_title" : self._video_title,
-            "video_length" : self._video_length,
-            "video_link"  : self._link,
-            "channel_url" : self._video_author,
-                }
+            "video_title": self._video_title,
+            "video_length": self._video_length,
+            "video_link": self._link,
+            "channel_url": self._video_author,
+            "cuts": 0
+        }
 
     @property
     def title(self):
@@ -31,69 +33,64 @@ class videoJson ():
     @property
     def length(self):
         return self._video_length
-    
+
     @property
     def author(self):
         return self._video_author
-    
+
     @property
     def path(self):
         return self._path_json
-    
+
     @property
     def dictionary(self):
         return self.dictionary
-    
 
-    ## use object in config.py to found path
-    ## path_json = os.path.join(os.getcwd(), "videosFolder/video.json" ) (old version)
+    # use object in config.py to found path
+    # path_json = os.path.join(os.getcwd(), "videosFolder/video.json" ) (old version)
 
-    
-    ##check if the json exits, if don't, creates it
+    # check if the json exits, if don't, creates it
+
     def __createJson(self):
         if(os.path.exists(self._path_json) == False):
-                first_dictionary = {"video_details":[]}
-                json_object = json.dumps(first_dictionary, indent = 3)
-                with open(self._path_json, "w") as outfile:
-                    outfile.write(json_object) 
-                    outfile.close() 
-       
+            first_dictionary = {"video_details": []}
+            json_object = json.dumps(first_dictionary, indent=3)
+            with open(self._path_json, "w") as outfile:
+                outfile.write(json_object)
+                outfile.close()
 
+    # Append json in correct format
 
-    
-    ## Append json in correct format
     def addJson(self):
 
         self.__createJson()
 
         try:
-            with open(self._path_json,'r+') as outfile:
-                    file_data = json.load(outfile)
+            with open(self._path_json, 'r+') as outfile:
+                file_data = json.load(outfile)
 
-                    file_data["video_details"].append(self._dictionary)
+                file_data["video_details"].append(self._dictionary)
 
-                    outfile.seek(0)
+                outfile.seek(0)
 
-                    json.dump(file_data,outfile,indent = len(self._dictionary))
+                json.dump(file_data, outfile, indent=len(self._dictionary))
 
-                    outfile.close() 
+                outfile.close()
         except:
             showError("Unable To create Json")
-            
-
 
 
 class dowloader():
 
-    def __init__(self,link, resolution = '360p'):
+    def __init__(self, link, resolution='360p'):
         self._link = link
         ##self._path_videos = os.path.join(os.getcwd(), "videosFolder" )
         self._path_videos = Config.getConfig("downloadPath")
-        ##print(Config.getConfig("downloadPath"))
+        # print(Config.getConfig("downloadPath"))
         self.json = videoJson(link)
         self._resolution = Config.getConfig("resolution")
 
-    ## Download Video from Youtube
+    # Download Video from Youtube
     def download(self):
         try:
             yt = YouTube(self._link)
@@ -102,9 +99,9 @@ class dowloader():
             self.json.addJson()
         except:
             showError("Unable to Download Video")
-        
 
 
 if __name__ == "__main__":
-    TestVideo = dowloader("https://www.youtube.com/watch?v=uT_DcEK6jFU&ab_channel=AulaLivre")
+    TestVideo = dowloader(
+        "https://www.youtube.com/watch?v=uT_DcEK6jFU&ab_channel=AulaLivre")
     TestVideo.download()
