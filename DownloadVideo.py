@@ -1,5 +1,6 @@
 from pytube import YouTube
 from ErrorHandler import *
+from Config import *
 import os
 import os.path
 import json
@@ -14,7 +15,7 @@ class videoJson ():
         self._video_title = yt.title
         self._video_length = yt.length
         self._video_author = yt.channel_url
-        self._path_json = os.path.join(os.getcwd(), "videosFolder/video.json" )
+        self._path_json = os.path.join(Config.getConfig("downloadPath"), "video.json" )
         
         self._dictionary = {
             "video_title" : self._video_title,
@@ -86,9 +87,11 @@ class dowloader():
 
     def __init__(self,link, resolution = '360p'):
         self._link = link
-        self._path_videos = os.path.join(os.getcwd(), "videosFolder" )
+        ##self._path_videos = os.path.join(os.getcwd(), "videosFolder" )
+        self._path_videos = Config.getConfig("downloadPath")
+        ##print(Config.getConfig("downloadPath"))
         self.json = videoJson(link)
-        self._resolution = resolution
+        self._resolution = Config.getConfig("resolution")
 
     ## Download Video from Youtube
     def download(self):
