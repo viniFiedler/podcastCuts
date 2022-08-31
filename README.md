@@ -4,15 +4,15 @@
 
 ### This project uses python3.10
 
-```python
+```cmd
 pip install pytube
-
+pip install moviepy
 ```
 
 ## Features
 
 - [x] Download Youtube's video
-  - [ ] List of already dowloaded Videos
+  - [x] List of already dowloaded Videos
 - [ ] Cut video at a certain time
   - [ ] json of already cut videos
 - [ ] Resize
